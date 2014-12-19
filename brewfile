@@ -2,4 +2,6 @@ wget
 curl
 git
 tmux
+ag
+trash
 emacs-mac --cocoa
