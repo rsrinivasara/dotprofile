@@ -10,8 +10,6 @@
  ;; Paths must have a trailing slash (ie. `~/.mycontribs/')
  dotspacemacs-configuration-layer-path '()
  ;; List of configuration layers to load.
- ;; dotspacemacs-configuration-layers '(python
- ;;                                     company-mode)
  ;; dotspacemacs-configuration-layers '()
  dotspacemacs-configuration-layers '(git
                                      company-mode)
@@ -50,6 +48,9 @@
 (defun dotspacemacs/init ()
   "User initialization for Spacemacs. This function is called at the very
  startup."
+  (unless (string-equal user-login-name "rsriniva")
+         (setq paradox-github-token "7d70779d8bb6bed9449ff623f495f121fd68b8c7")) 
+
   (if (string-equal user-login-name "rsriniva")
    (setq url-proxy-services
     '(("http" . "devproxy.bloomberg.com:82")
