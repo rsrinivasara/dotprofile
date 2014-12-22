@@ -32,7 +32,7 @@
  ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth scrolling
  ;; overrides the default behavior of Emacs which recenters the point when
  ;; it reaches the top or bottom of the screen
- dotspacemacs-smooth-scrolling nil 
+ dotspacemacs-smooth-scrolling nil
  ;; If non nil pressing 'jk' in insert state, ido or helm will activate the
  ;; evil leader.
  dotspacemacs-feature-toggle-leader-on-jk nil
@@ -49,7 +49,7 @@
   "User initialization for Spacemacs. This function is called at the very
  startup."
   (unless (string-equal user-login-name "rsriniva")
-         (setq paradox-github-token "7d70779d8bb6bed9449ff623f495f121fd68b8c7")) 
+         (setq paradox-github-token "7d70779d8bb6bed9449ff623f495f121fd68b8c7"))
 
   (if (string-equal user-login-name "rsriniva")
    (setq url-proxy-services
@@ -113,7 +113,7 @@
   (if (equal user-login-name "rsriniva")
       (rsriniva-c-headers-path-system)
     (ram-c-headers-path-system)))
-  
+
 (defun dotspacemacs/config ()
   "This is were you can ultimately override default Spacemacs configuration.
 This function is called at the very end of Spacemacs initialization."
@@ -172,11 +172,11 @@ This function is called at the very end of Spacemacs initialization."
         ))
   (setq whitespace-style '(face trailing tabs empty spaces tab-mark lines-tail))
   (setq whitespace-space-regexp "\\( +$\\)")
-
-  ;; "\\(^ +\\)"		visualize only leading SPACEs.
-  ;; "\\( +$\\)"		visualize only trailing SPACEs.
-  ;; "\\(^ +\\| +$\\)"	visualize leading and/or trailing SPACEs.
-  ;; "\t\\( +\\)\t"	visualize only SPACEs between TABs.
+  ;; "\\(^ +\\)"    visualize only leading SPACEs.
+  ;; "\\( +$\\)"    visualize only trailing SPACEs.
+  ;; "\\(^ +\\| +$\\)"  visualize leading and/or trailing SPACEs.
+  ;; "\t\\( +\\)\t"   visualize only SPACEs between TABs.
+  (add-hook 'prog-mode-hook 'whitespace-mode)
 
 
   ;; (setq fci-rule-column 79)
