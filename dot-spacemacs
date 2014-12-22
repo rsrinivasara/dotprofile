@@ -143,7 +143,6 @@ This function is called at the very end of Spacemacs initialization."
               (setq indent-tabs-mode nil)
               (setq c-basic-offset 4)))
 
-  (add-to-list 'company-backends 'company-c-headers)
   (setq company-c-headers-path-system 'custom-c-headers-path-system)
 
   (setq locale-coding-system 'utf-8) ; pretty
