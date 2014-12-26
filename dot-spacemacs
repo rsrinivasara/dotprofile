@@ -15,7 +15,7 @@
                                      company-mode)
 
  ;; A list of packages and/or extensions that will not be install and loaded.
- dotspacemacs-excluded-packages '()
+ dotspacemacs-excluded-packages '(company-tern)
 )
 
 ;; Settings

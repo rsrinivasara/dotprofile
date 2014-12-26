@@ -47,7 +47,7 @@ def info():
 
 def main():
     try:
-        print info()
+        print(info())
     except (KeyboardInterrupt, SystemExit):
         pass
 
