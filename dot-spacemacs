@@ -203,6 +203,7 @@ This function is called at the very end of Spacemacs initialization."
  '(ahs-idle-interval 0.25)
  '(ahs-idle-timer 0 t)
  '(ahs-inhibit-face-list nil)
+ '(org-agenda-files nil)
  '(paradox-automatically-star nil)
  '(ring-bell-function (quote ignore) t))
 (custom-set-faces
