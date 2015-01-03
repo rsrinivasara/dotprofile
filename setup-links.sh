@@ -1,4 +1,4 @@
-rm ~/.bash_profile 
+rm ~/.bash_profile
 rm ~/.emacs.d
 rm ~/.spacemacs
 rm ~/.zshrc

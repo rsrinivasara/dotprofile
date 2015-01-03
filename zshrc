@@ -3,6 +3,9 @@ export ZSH=$HOME/.oh-my-zsh
 export PATH=${PATH}:~/config-ram/dotprofile/bin
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/opt/Caskroom"
 
+ZSH_TMUX_AUTOSTART=true
+ZSH_TMUX_TERM=/bin/zsh
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -47,7 +50,7 @@ ZSH_THEME="amuse"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gitfast git-extras osx)
+plugins=(autojump git gitfast git-extras osx python tmux)
 
 # User configuration
 
