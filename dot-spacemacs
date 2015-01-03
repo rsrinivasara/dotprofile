@@ -130,6 +130,9 @@ This function is called at the very end of Spacemacs initialization."
         (spacemacs/set-font "Monaco" 13)))
 
   (add-hook 'perl-mode-hook 'flycheck-mode)
+  (add-hook 'c-mode-common-hook 'flycheck-mode)
+
+  (add-hook 'find-file-hook (lambda() (company-mode/more-than-prefix-guesser)))
 
   ;; (add-hook 'cc-mode-hook (lambda () (toggle-truncate-lines
   ;;                                     turn-on-fci-mode)))
