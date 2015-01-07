@@ -2,9 +2,12 @@
 export ZSH=$HOME/.oh-my-zsh
 export PATH=${PATH}:~/config-ram/dotprofile/bin
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/opt/Caskroom"
+test -f /usr/bin/ksshaskpass && export SSH_ASKPASS="/usr/bin/ksshaskpass"
 
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_TERM=/bin/zsh
+
+eval "$(fasd --init auto)"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/

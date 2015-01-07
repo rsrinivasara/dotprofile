@@ -1,0 +1,17 @@
+# 
+# /etc/fstab: static file system information
+#
+# <file system>	<dir>	<type>	<options>	<dump>	<pass>
+# /dev/sdb2
+UUID=12e8b397-54e2-4d8e-bda1-01ebd7c0f295	/         	ext4      	rw,relatime,data=ordered	0 1
+
+# /dev/sdb1
+UUID=7B8B-6945      	/boot     	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro	0 2
+
+# /dev/sdb4
+UUID=702aed60-fa36-460e-a21f-edfd17b26002	none      	swap      	defaults  	0 0
+
+//192.168.1.107/data_1 /media/data1 cifs _netdev,noauto,credentials=/etc/samba_user,uid=1000 0 0
+//192.168.1.107/data_2 /media/data2 cifs _netdev,noauto,credentials=/etc/samba_user,uid=1000 0 0
+//192.168.1.107/data_3 /media/data3 cifs _netdev,noauto,credentials=/etc/samba_user,uid=1000 0 0
+UUID=F2546A115469D93D  /media/data  ntfs uid=1000,gid=1000,dmask=027,fmask=037  0 2

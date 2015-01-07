@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+sudo node /home/ram/bin/msi/on.js

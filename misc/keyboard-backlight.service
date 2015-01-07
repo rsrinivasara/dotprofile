@@ -1,0 +1,15 @@
+[Unit]
+Description=My script
+After=basic.target
+After=suspend.target
+After=hibernate.target
+
+[Service]
+ExecStart=/home/ram/bin/keyboard-backlight-on
+
+[Install]
+#WantedBy=multi-user.target 
+WantedBy=basic.target
+WantedBy=suspend.target
+WantedBy=hibernate.target
+
