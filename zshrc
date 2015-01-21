@@ -1,4 +1,6 @@
 # Path to your oh-my-zsh installation.
+export TERM=xterm-256color
+[ -n "$TMUX" ] && export TERM=screen-256color
 export ZSH=$HOME/.oh-my-zsh
 export PATH=${PATH}:~/config-ram/dotprofile/bin
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/opt/Caskroom"
@@ -13,7 +15,7 @@ eval "$(fasd --init auto)"
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="amuse"
+ZSH_THEME="ys"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

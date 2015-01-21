@@ -127,7 +127,7 @@ This function is called at the very end of Spacemacs initialization."
       (spacemacs/set-font "Monaco" 12)
       (if (string-equal user-login-name "rsriniva")
           (spacemacs/set-font "Liberation Mono for Powerline" 13)
-        (spacemacs/set-font "Monaco" 13)))
+        (spacemacs/set-font "Monaco" 10)))
 
   (add-hook 'perl-mode-hook 'flycheck-mode)
   (add-hook 'c-mode-common-hook 'flycheck-mode)
