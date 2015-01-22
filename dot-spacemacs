@@ -131,6 +131,8 @@ This function is called at the very end of Spacemacs initialization."
 
   (add-hook 'perl-mode-hook 'flycheck-mode)
   (add-hook 'c-mode-common-hook 'flycheck-mode)
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
 
   (add-hook 'find-file-hook (lambda() (company-mode/more-than-prefix-guesser)))
 
@@ -145,6 +147,10 @@ This function is called at the very end of Spacemacs initialization."
               (setq tab-width 4)
               (setq indent-tabs-mode nil)
               (setq c-basic-offset 4)))
+
+  (eval-after-load 'company-backends  '(add-to-list 'company-backends 'company-irony))
+  (eval-after-load 'flycheck-mode  '(add-to-list 'flycheck-checkers 'irony))
+  (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 
   (setq company-c-headers-path-system 'custom-c-headers-path-system)
 

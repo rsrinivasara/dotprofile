@@ -1,6 +1,6 @@
 # Path to your oh-my-zsh installation.
-export TERM=xterm-256color
-[ -n "$TMUX" ] && export TERM=screen-256color
+# export TERM=xterm-256color
+export TERM=screen-256color
 export ZSH=$HOME/.oh-my-zsh
 export PATH=${PATH}:~/config-ram/dotprofile/bin
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/opt/Caskroom"
