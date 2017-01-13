@@ -6,7 +6,7 @@ export PATH=${PATH}:~/config-ram/dotprofile/bin
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/opt/Caskroom"
 test -f /usr/bin/ksshaskpass && export SSH_ASKPASS="/usr/bin/ksshaskpass"
 
-ZSH_TMUX_AUTOSTART=true
+ZSH_TMUX_AUTOSTART=false
 ZSH_TMUX_TERM=/bin/zsh
 
 eval "$(fasd --init auto)"
