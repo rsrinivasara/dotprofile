@@ -7,5 +7,5 @@ ag
 trash
 emacs-mac --cocoa
 vim
-node
 autojump
+fasd
