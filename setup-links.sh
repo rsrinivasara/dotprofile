@@ -12,6 +12,7 @@ git clone https://github.com/mbadolato/iTerm2-Color-Schemes.git ~/config-ram/ite
 ln -s ~/config-ram/spacemacs ~/.emacs.d
 ln -s ~/config-ram/dotprofile/dot-spacemacs ~/.spacemacs
 ln -s ~/config-ram/dotprofile/bash_profile ~/.bash_profile
+ln -s ~/config-ram/dotprofile/bashrc ~/.bashrc
 ln -s ~/config-ram/dotprofile/zshrc ~/.zshrc
 ln -s ~/config-ram/dotprofile/tmux.conf ~/.tmux.conf
 ln -s ~/config-ram/dotvim ~/.vim

@@ -12,7 +12,7 @@
  ;; List of configuration layers to load.
  ;; dotspacemacs-configuration-layers '()
  dotspacemacs-configuration-layers '(git
-                                     company-mode)
+                                     cpp-irony)
 
  ;; A list of packages and/or extensions that will not be install and loaded.
  dotspacemacs-excluded-packages '(company-tern)
@@ -23,7 +23,8 @@
 
 (setq-default
  ;; Default theme applied at startup
- dotspacemacs-default-theme 'zenburn
+ ;; dotspacemacs-default-theme 'zenburn
+ dotspacemacs-themes '(zenburn)
  ;; Guide-key delay in seconds. The Guide-key is the popup buffer listing
  ;; the commands bound to the current keystrokes.
  dotspacemacs-guide-key-delay 0.4
@@ -123,18 +124,24 @@ This function is called at the very end of Spacemacs initialization."
     ;; (setq linum-format "%4d ")
     ;; (setq linum-relative-format "%3s "))
 
-  (if (string-equal system-type "darwin")
-      (spacemacs/set-font "Monaco" 12)
-      (if (string-equal user-login-name "rsriniva")
-          (spacemacs/set-font "Liberation Mono for Powerline" 13)
-        (spacemacs/set-font "Monaco" 10)))
+    (setq-default dotspacemacs-default-font '("Source Code Pro"
+                                              :size 13
+                                              :weight normal
+                                              :width normal
+                                              :powerline-scale 1.1))
+
+  ;; (if (string-equal system-type "darwin")
+  ;;     (spacemacs/set-font "Monaco" 12)
+  ;;     (if (string-equal user-login-name "rsriniva")
+  ;;         (spacemacs/set-font "Liberation Mono for Powerline" 13)
+  ;;       (spacemacs/set-font "Monaco" 10)))
 
   (add-hook 'perl-mode-hook 'flycheck-mode)
   (add-hook 'c-mode-common-hook 'flycheck-mode)
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
 
-  (add-hook 'find-file-hook (lambda() (company-mode/more-than-prefix-guesser)))
+  ;; (add-hook 'find-file-hook (lambda() (company-mode/more-than-prefix-guesser)))
 
   ;; (add-hook 'cc-mode-hook (lambda () (toggle-truncate-lines
   ;;                                     turn-on-fci-mode)))
@@ -148,11 +155,11 @@ This function is called at the very end of Spacemacs initialization."
               (setq indent-tabs-mode nil)
               (setq c-basic-offset 4)))
 
-  (eval-after-load 'company-backends  '(add-to-list 'company-backends 'company-irony))
+  (eval-after-load 'company-irony '(add-to-list 'company-backends 'company-irony))
   (eval-after-load 'flycheck-mode  '(add-to-list 'flycheck-checkers 'irony))
   (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 
-  (setq company-c-headers-path-system 'custom-c-headers-path-system)
+  ;; (setq company-c-headers-path-system 'custom-c-headers-path-system)
 
   (setq locale-coding-system 'utf-8) ; pretty
   (set-terminal-coding-system 'utf-8) ; pretty
