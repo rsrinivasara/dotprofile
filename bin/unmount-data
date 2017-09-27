@@ -1,4 +1,0 @@
-#!/usr/bin/bash
-sudo umount /media/data1
-sudo umount /media/data2
-sudo umount /media/data3

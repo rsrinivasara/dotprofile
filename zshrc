@@ -2,7 +2,6 @@
 # export TERM=xterm-256color
 export TERM=screen-256color
 export ZSH=$HOME/.oh-my-zsh
-export PATH=/home/ram/anaconda3/bin:${PATH}:~/config-ram/dotprofile/bin
 export HOMEBREW_CASK_OPTS="--appdir=/Applications --caskroom=/opt/Caskroom"
 test -f /usr/bin/ksshaskpass && export SSH_ASKPASS="/usr/bin/ksshaskpass"
 
@@ -88,4 +87,3 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias cc3="cd /media/data1/Ram/coursera/CloudComputing3"
