@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import subprocess
@@ -24,7 +24,7 @@ def exec_command(cmd, inp = None, env = None):
         Raises in case of error
     """
     if debug_mode():
-        print cmd
+        print(cmd)
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE, env=env)
     if inp:
@@ -37,7 +37,7 @@ def exec_command(cmd, inp = None, env = None):
             pass
     (proc_out, proc_err) = proc.communicate()
     if debug_mode():
-        print proc_out, proc_err
+        print(proc_out, proc_err)
     if proc.returncode != 0:
         raise ExecutionError(proc_err, " ".join(cmd), proc_out, proc_err)
     return proc_out
