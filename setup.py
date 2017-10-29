@@ -28,6 +28,12 @@ def mkdirs_verbose(dir):
 
     os.makedirs(dir)
 
+def touch(fname):
+    try:
+        os.utime(fname, None)
+    except OSError:
+        open(fname, 'a').close()
+
 class UserEnv(object):
     """
     [proxy]
@@ -40,6 +46,7 @@ class UserEnv(object):
     python3 =
     venv_exec =
     python2_venv =
+    python3_venv =
     nvim_venv_python2 =
     nvim_venv_python3 =
     (optional) cert =
@@ -110,9 +117,13 @@ class PythonVenvCreator(object):
         self.user_env = user_env
         self.venv_path = venv_path
         self.python_exec = python_exec
+        self.pip_exec = os.path.join(self.venv_path, 'bin', 'pip')
+        self.cmd_env = self.user_env.get_proxy_env()
 
     def create(self):
-        if not os.path.exists(self.venv_path):
+        created_file = os.path.join(self.venv_path, '.created')
+
+        if not os.path.exists(created_file):
             print('Creating venv {} ...'.format(self.venv_path))
             mkdirs_verbose(self.venv_path)
             create_venv_cmd = [ self.user_env.venv_exec,
@@ -120,25 +131,27 @@ class PythonVenvCreator(object):
                                 '-p', self.python_exec ]
             easy_exec.exec_command(create_venv_cmd)
 
-        cmd_env = self.user_env.get_proxy_env()
+            touch(created_file)
+        else:
+            print('{} already exists'.format(self.venv_path))
 
         # Upgrade pip
         print('Upgrading pip ...')
-        pip_exec = os.path.join(self.venv_path, 'bin', 'pip')
-        upgrade_pip_cmd = [ pip_exec,
+        upgrade_pip_cmd = [ self.pip_exec,
                             'install', '--upgrade', 'pip' ]
         if self.user_env.cert is not None:
             upgrade_pip_cmd.extend(['--cert', self.user_env.cert])
-        easy_exec.exec_command(upgrade_pip_cmd, env=cmd_env)
+        easy_exec.exec_command(upgrade_pip_cmd, env=self.cmd_env)
+
 
     def install_packages(self, packages):
         die_if_not_preset(self.venv_path)
 
         print('Installing {} ...'.format(' '.join(packages)))
-        install_cmd = [ pip_exec, 'install' ] + packages
+        install_cmd = [ self.pip_exec, 'install' ] + packages
         if self.user_env.cert is not None:
             install_cmd.extend(['--cert', self.user_env.cert])
-        easy_exec.exec_command(install_cmd, env=cmd_env)
+        easy_exec.exec_command(install_cmd, env=self.cmd_env)
 
 class NeovimEnv(object):
     def __init__(self, user_env):
@@ -199,11 +212,13 @@ class NeovimEnv(object):
 
     def setup(self):
         print('Setting up neovim ...')
+        print('---------------------')
         self._setup_venvs()
         self._setup_dirs()
         self._create_init_vim()
         self._setup_vim_plugged()
         print('Done')
+        print('---------------------\n')
 
 
 class TmuxEnv(object):
@@ -245,27 +260,43 @@ class PythonVenv(object):
         self.user_env = user_env
 
     def setup(self):
+        print('Setting up PythonVenv')
+        print('---------------------')
         venv_creator = PythonVenvCreator(self.user_env,
                                          self.user_env.python3_venv,
                                          self.user_env.python3)
         venv_creator.create()
-        venv_creator.install_packages(['numpy', 'pandas'])
+        venv_creator.install_packages(['numpy', 'pandas', 'scipy',
+                                       'scikit-learn', 'matplotlib'])
+        print('---------------------\n')
+
 
 def main():
     parser = argparse.ArgumentParser(description='Setup user profile')
-    add_yesno_argument(parser, 'neovim')
-    add_yesno_argument(parser, 'tmux')
-    add_yesno_argument(parser, 'zsh')
-    add_yesno_argument(parser, 'python_venv')
+    opts = ['neovim', 'tmux', 'zsh', 'python_venv']
+
+    for opt in opts:
+        add_yesno_argument(parser, opt)
 
     args = parser.parse_args()
+
+    user_env = UserEnv()
+    print('Using {} as dotprofile dir'.format(user_env.dotprofile_dir))
+
     print(args)
+    print(getattr(args, 'neovim'))
 
-    # user_env = UserEnv()
-    # print('Using {} as dotprofile dir'.format(user_env.dotprofile_dir))
+    return
 
-    # nvim_env = NeovimEnv(user_env)
-    # nvim_env.setup()
+
+    if args.neovim:
+        nvim_env = NeovimEnv(user_env)
+        nvim_env.setup()
+
+    if args.python_venv:
+        python_env = PythonVenv(user_env)
+        python_env.setup()
+
 
 if __name__ == "__main__":
     main()
