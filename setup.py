@@ -112,6 +112,8 @@ class UserEnv(object):
 
         return proxy_env
 
+# This does not work for python3 as python3-virtualenv is depricated.
+# See https://docs.python.org/3/library/venv.html
 class PythonVenvCreator(object):
     def __init__(self, user_env, venv_path, python_exec):
         self.user_env = user_env
@@ -126,9 +128,11 @@ class PythonVenvCreator(object):
         if not os.path.exists(created_file):
             print('Creating venv {} ...'.format(self.venv_path))
             mkdirs_verbose(self.venv_path)
-            create_venv_cmd = [ self.user_env.venv_exec,
-                                self.venv_path,
-                                '-p', self.python_exec ]
+            # create_venv_cmd = [ self.user_env.venv_exec,
+            #                     self.venv_path,
+            #                     '-p', self.python_exec ]
+            create_venv_cmd = [ self.python_exec, '-m', 'venv',
+                                self.venv_path ]
             easy_exec.exec_command(create_venv_cmd)
 
             touch(created_file)
@@ -283,11 +287,10 @@ def main():
     user_env = UserEnv()
     print('Using {} as dotprofile dir'.format(user_env.dotprofile_dir))
 
-    print(args)
-    print(getattr(args, 'neovim'))
+    # print(args)
+    # print(getattr(args, 'neovim'))
 
-    return
-
+    # return
 
     if args.neovim:
         nvim_env = NeovimEnv(user_env)
