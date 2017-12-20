@@ -115,17 +115,13 @@ set foldcolumn=0        " columns for folding
 set foldmethod=indent
 set foldlevel=9
 set nofoldenable        "dont fold by default "
+set relativenumber
 
 " extended '%' mapping for if/then/else/end etc
 runtime macros/matchit.vim
 
 let mapleader = ","
 let maplocalleader = "\\"
-
-" Always switch to the current file directory
-if ! &diff
-    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-endif
 
 " Strip Whitespace
 function! StripTrailingWhitespace()
@@ -257,3 +253,28 @@ nnoremap <F3> :buffers<CR>:buffer<SPACE>
 "":map!
 ":redir END
 
+" Always switch to the current file directory
+" TODO: FIXME: enabling this makes denite only display current directory stuff
+"if ! &diff
+"    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+"endif
+"
+" We always remain at root of git repo or at the directory of the file that was
+" opened using vim
+"
+" Use leader<e> to edit a file in the same directory as current file
+map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+
+function! CdTop()
+  let topdir=system("git rev-parse --show-toplevel")
+  if v:shell_error
+    " Not a git repo, so switch to the directory of current file
+    :cd %:p:h
+  else
+    " Git repo, switch to root of git repo
+    :execute ":cd " . topdir
+  endif
+endfunction
+
+command! CdTop call CdTop()
+CdTop

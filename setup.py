@@ -5,11 +5,15 @@ import sys
 import configparser
 import easy_exec
 import argparse
+import shutil
 
 def link_verbose(src, dest):
     if os.path.exists(dest) or os.path.islink(dest):
         print('Removing {}'.format(dest))
-        os.remove(dest)
+        if os.path.isfile(dest) or os.path.islink(dest):
+            os.remove(dest)
+        else:
+            shutil.rmtree(dest)
 
     print('Linking {} -> {}'.format(dest, src))
     os.symlink(src, dest)
@@ -128,11 +132,11 @@ class PythonVenvCreator(object):
         if not os.path.exists(created_file):
             print('Creating venv {} ...'.format(self.venv_path))
             mkdirs_verbose(self.venv_path)
-            # create_venv_cmd = [ self.user_env.venv_exec,
-            #                     self.venv_path,
-            #                     '-p', self.python_exec ]
-            create_venv_cmd = [ self.python_exec, '-m', 'venv',
-                                self.venv_path ]
+            create_venv_cmd = [ self.user_env.venv_exec,
+                                self.venv_path,
+                                '-p', self.python_exec ]
+            # create_venv_cmd = [ self.python_exec, '-m', 'venv',
+            #                    self.venv_path ]
             easy_exec.exec_command(create_venv_cmd)
 
             touch(created_file)
@@ -198,7 +202,7 @@ class NeovimEnv(object):
             f.write('let g:python_host_prog="{}"\n'.format(
                         os.path.join(self.user_env.nvim_venv_python2, 'bin', 'python')))
             f.write('let g:python3_host_prog="{}"\n'.format(
-                        os.path.join(self.user_env.nvim_venv_python3, 'bin', 'python3')))
+                        os.path.join(self.user_env.nvim_venv_python3, 'bin', 'python')))
             f.write('source {}\n'.format(os.path.join(self.nvim_link, 'init.vim')))
 
     def _setup_vim_plugged(self):

@@ -14,9 +14,9 @@ if (empty($TMUX))
   endif
 endif
 
+source ~/.nvim/global.vim
 source ~/.nvim/plugins.vim
 source ~/.nvim/plugin_config.vim
-source ~/.nvim/global.vim
 source ~/.nvim/bindings.vim
 
 if !has('gui_running')

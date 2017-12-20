@@ -9,6 +9,7 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
+"Plug 'zchee/deoplete-clang'
 
 Plug 'Shougo/denite.nvim'
 
@@ -16,5 +17,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tpope/vim-fugitive'
+
+Plug 'derekwyatt/vim-fswitch'
+Plug 'scrooloose/nerdcommenter'
 
 call plug#end()
