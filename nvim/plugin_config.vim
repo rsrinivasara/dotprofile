@@ -12,17 +12,20 @@ function! s:check_back_space() abort "{{{
 endfunction"}}}
 
 " Deoplete-jedi
-let g:deoplete#sources#jedi#python_path="/home/rsriniva/bin/nvim_venv3/bin/python"
+let g:deoplete#sources#jedi#python_path="/home/rsriniva/bign/venvs/nvim_python3_venv/bin/python"
 let g:deoplete#sources#jedi#show_docstring = 1
 
 " Denite
 source ~/.nvim/denite_config.vim
 
-" Deoplete-clang
-" let g:deoplete#sources#clang#libclang_path
 
-
-
+" Language Client
+let g:LanguageClient_serverCommands = {
+            \ 'cpp': ['/home/rsriniva/repos/cquery/build/release/bin/cquery', '--log-file=/tmp/cq.log']
+            \ }
+let g:LanguageClient_loadSettings = 1
+" Use an absolute configuration path if you want system-wide settings
+let g:LanguageClient_settingsPath = '/home/rsriniva/.config/nvim/settings.json'
 
 " Airline
 let g:airline_powerline_fonts=1
@@ -49,3 +52,9 @@ nmap <leader>gc :Gcommit<CR>
 nmap <Leader>fh :FSHere<CR>
 nmap <Leader>fl :FSLeft<CR>
 nmap <Leader>fr :FSRight<CR>
+
+"------------------------------------------------------------------------------
+" ListToggle - Easily switch between header and cpp files
+
+let g:lt_location_list_toggle_map = '<LocalLeader>l'
+let g:lt_quickfix_list_toggle_map = '<LocalLeader>q'

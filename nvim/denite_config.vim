@@ -39,10 +39,15 @@ call denite#custom#source(
             \ 'converters', ['converter_relative_word'])
 
 " FIND and GREP COMMANDS
+call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+call denite#custom#var('file_rec/git', 'command',
+            \ ['git', 'ls-files', '-co', '--exclude-standard'])
+
 if executable('ag')
     " The Silver Searcher
     call denite#custom#var('file_rec', 'command',
                 \ ['ag', '-U', '--hidden', '--follow', '--nocolor', '--nogroup', '-g', ''])
+
 
     " Setup ignore patterns in your .agignore file!
     " https://github.com/ggreer/the_silver_searcher/wiki/Advanced-Usage
@@ -99,6 +104,10 @@ endfor
 
 nnoremap <silent><LocalLeader>r :<C-u>Denite -resume -refresh<CR>
 nnoremap <silent><LocalLeader>f :<C-u>Denite file_rec<CR>
+
+nnoremap <silent> <C-p> :<C-u>Denite
+            \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
+
 nnoremap <silent><LocalLeader>b :<C-u>Denite buffer file_old -default-action=switch<CR>
 nnoremap <silent><LocalLeader>d :<C-u>Denite directory_rec -default-action=cd<CR>
 nnoremap <silent><LocalLeader>v :<C-u>Denite register -buffer-name=register<CR>

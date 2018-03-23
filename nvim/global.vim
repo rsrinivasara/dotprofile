@@ -121,7 +121,7 @@ set relativenumber
 runtime macros/matchit.vim
 
 let mapleader = ","
-let maplocalleader = "\\"
+let maplocalleader = " "
 
 " Strip Whitespace
 function! StripTrailingWhitespace()

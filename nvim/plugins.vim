@@ -8,8 +8,13 @@ Plug 'freeo/vim-kalisi'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
 Plug 'zchee/deoplete-jedi'
-"Plug 'zchee/deoplete-clang'
 
 Plug 'Shougo/denite.nvim'
 
@@ -20,5 +25,7 @@ Plug 'tpope/vim-fugitive'
 
 Plug 'derekwyatt/vim-fswitch'
 Plug 'scrooloose/nerdcommenter'
+
+Plug 'Valloric/ListToggle'
 
 call plug#end()

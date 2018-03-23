@@ -211,7 +211,7 @@ class NeovimEnv(object):
                                      'site', 'autoload', 'plug.vim')
         cmd_env = self.user_env.get_proxy_env()
 
-        cmd = [ 'curl', '-fLo', vim_plug_file, '--create-dirs',
+        cmd = [ 'curl', '-k', '-fLo', vim_plug_file, '--create-dirs',
                 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim' ]
 
         if self.user_env.cert is not None:
@@ -274,8 +274,9 @@ class PythonVenv(object):
                                          self.user_env.python3_venv,
                                          self.user_env.python3)
         venv_creator.create()
-        venv_creator.install_packages(['numpy', 'pandas', 'scipy',
-                                       'scikit-learn', 'matplotlib'])
+        # venv_creator.install_packages(['numpy', 'pandas', 'scipy',
+        #                                'scikit-learn', 'matplotlib'])
+        venv_creator.install_packages(['deepdiff', 'pyyaml', 'scan-build'])
         print('---------------------\n')
 
 
@@ -296,13 +297,13 @@ def main():
 
     # return
 
-    if args.neovim:
-        nvim_env = NeovimEnv(user_env)
-        nvim_env.setup()
+    # if args.neovim:
+    #     nvim_env = NeovimEnv(user_env)
+    #     nvim_env.setup()
 
     if args.python_venv:
-        python_env = PythonVenv(user_env)
-        python_env.setup()
+       python_env = PythonVenv(user_env)
+       python_env.setup()
 
 
 if __name__ == "__main__":
