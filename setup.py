@@ -5,6 +5,7 @@ import sys
 import configparser
 import easy_exec
 import argparse
+import re
 
 def link_verbose(src, dest):
     if os.path.exists(dest) or os.path.islink(dest):
@@ -112,6 +113,20 @@ class UserEnv(object):
 
         return proxy_env
 
+def get_python_version(python_exec):
+    try:
+        lines = easy_exec.exec_command([python_exec, '--version'])
+    except easy_exec.ExecutionError:
+        print('Cant get version of {}'.format(python_exec))
+        return 0
+
+    reg = re.compile(b'Python (\d*)\.(\d*)\.(\d*)')
+    m = reg.match(lines)
+    if m:
+        return int(m.group(1))
+
+    return 0
+
 # This does not work for python3 as python3-virtualenv is depricated.
 # See https://docs.python.org/3/library/venv.html
 class PythonVenvCreator(object):
@@ -128,11 +143,14 @@ class PythonVenvCreator(object):
         if not os.path.exists(created_file):
             print('Creating venv {} ...'.format(self.venv_path))
             mkdirs_verbose(self.venv_path)
-            # create_venv_cmd = [ self.user_env.venv_exec,
-            #                     self.venv_path,
-            #                     '-p', self.python_exec ]
-            create_venv_cmd = [ self.python_exec, '-m', 'venv',
-                                self.venv_path ]
+            if get_python_version(self.python_exec) == 3:
+                create_venv_cmd = [ self.python_exec, '-m', 'venv',
+                                    self.venv_path ]
+            else:
+                create_venv_cmd = [ self.user_env.venv_exec,
+                                    self.venv_path,
+                                    '-p', self.python_exec ]
+
             easy_exec.exec_command(create_venv_cmd)
 
             touch(created_file)
@@ -271,7 +289,10 @@ class PythonVenv(object):
                                          self.user_env.python3)
         venv_creator.create()
         venv_creator.install_packages(['numpy', 'pandas', 'scipy',
-                                       'scikit-learn', 'matplotlib'])
+                                       'scikit-learn', 'matplotlib',
+                                       'pandas-datareader', 'beautifulsoup4',
+                                       'lxml'
+                                       ])
         print('---------------------\n')
 
 
@@ -296,9 +317,9 @@ def main():
         nvim_env = NeovimEnv(user_env)
         nvim_env.setup()
 
-    if args.python_venv:
-        python_env = PythonVenv(user_env)
-        python_env.setup()
+    # if args.python_venv:
+    #     python_env = PythonVenv(user_env)
+    #     python_env.setup()
 
 
 if __name__ == "__main__":

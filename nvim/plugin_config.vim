@@ -11,6 +11,22 @@ function! s:check_back_space() abort "{{{
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction"}}}
 
+" LanguageClient
+let g:LanguageClient_serverCommands = {
+\ 'cpp': ['/home/ram/repos/cquery/build/release/bin/cquery', '--language-server', '--log-file=/tmp/cq.log']
+\ }
+let g:LanguageClient_loadSettings = 1
+let g:LanguageClient_settingsPath = '/home/ram/.config/nvim/cquery_settings.json'
+set completefunc=LanguageClient#complete
+set formatexpr=LanguageClient_textDocument_rangeFormatting()
+
+nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
+nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
+
 " Deoplete-jedi
 let g:deoplete#sources#jedi#python_path="/home/rsriniva/repos/venv3/bin/python3"
 let g:deoplete#sources#jedi#show_docstring = 1
