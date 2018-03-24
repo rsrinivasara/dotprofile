@@ -1,43 +1,14 @@
 #!/usr/bin/env python3
 
-import os
-import sys
-import configparser
-import easy_exec
 import argparse
+import configparser
+import os
 import re
-import shutil
+import sys
 
-def link_verbose(src, dest):
-    if os.path.exists(dest) or os.path.islink(dest):
-        print('Removing {}'.format(dest))
-        if os.path.isfile(dest) or os.path.islink(dest):
-            os.remove(dest)
-        else:
-            shutil.rmtree(dest)
-
-    print('Linking {} -> {}'.format(dest, src))
-    os.symlink(src, dest)
-
-def die_if_not_preset(name):
-    if not os.path.exists(name):
-        print('Cant find {}.  Exiting ...'.format(name))
-        sys.exit(1)
-
-def mkdirs_verbose(dir):
-    if os.path.exists(dir):
-        if not os.path.isdir(dir):
-            print('{} is not a directory.  Exiting ...'.format(dir))
-            sys.exit(1)
-        return
-
-    os.makedirs(dir)
-
-def touch(fname):
-    try:
-        os.utime(fname, None)
-    except OSError:
-        open(fname, 'a').close()
+import easy_exec
+import setup_utils
+import venv_manager
 
 class UserEnv(object):
     """
@@ -73,35 +44,35 @@ class UserEnv(object):
             self.https_proxy = cfg.get('proxy', 'https_proxy')
 
         self.dotprofile_dir = cfg.get('paths', 'dotprofile')
-        die_if_not_preset(self.dotprofile_dir)
+        setup_utils.die_if_not_preset(self.dotprofile_dir)
 
         self.python2 = cfg.get('paths', 'python2')
-        die_if_not_preset(self.dotprofile_dir)
+        setup_utils.die_if_not_preset(self.dotprofile_dir)
 
         self.python3 = cfg.get('paths', 'python3')
-        die_if_not_preset(self.python3)
+        setup_utils.die_if_not_preset(self.python3)
 
         self.venv_exec = cfg.get('paths', 'venv_exec')
-        die_if_not_preset(self.venv_exec)
+        setup_utils.die_if_not_preset(self.venv_exec)
 
         self.python2_venv = cfg.get('paths', 'python2_venv')
-        mkdirs_verbose(self.python2_venv)
+        setup_utils.mkdirs_verbose(self.python2_venv)
 
         self.python3_venv = cfg.get('paths', 'python3_venv')
-        mkdirs_verbose(self.python3_venv)
+        setup_utils.mkdirs_verbose(self.python3_venv)
 
         self.nvim_venv_python2 = cfg.get('paths', 'nvim_venv_python2')
-        mkdirs_verbose(self.nvim_venv_python2)
+        setup_utils.mkdirs_verbose(self.nvim_venv_python2)
 
         self.nvim_venv_python3 = cfg.get('paths', 'nvim_venv_python3')
-        mkdirs_verbose(self.nvim_venv_python3)
+        setup_utils.mkdirs_verbose(self.nvim_venv_python3)
 
         self.cert = None
         if cfg.has_option('paths', 'cert'):
             self.cert = cfg.get('paths', 'cert')
 
         self.zsh = cfg.get('paths', 'zsh')
-        die_if_not_preset(self.zsh)
+        setup_utils.die_if_not_preset(self.zsh)
 
     def use_proxy(self):
         return self.http_proxy is not None or self.https_proxy is not None
@@ -116,68 +87,6 @@ class UserEnv(object):
                 proxy_env['https_proxy'] = self.https_proxy
 
         return proxy_env
-
-def get_python_version(python_exec):
-    try:
-        lines = easy_exec.exec_command([python_exec, '--version'])
-    except easy_exec.ExecutionError:
-        print('Cant get version of {}'.format(python_exec))
-        return 0
-
-    reg = re.compile(b'Python (\d*)\.(\d*)\.(\d*)')
-    m = reg.match(lines)
-    if m:
-        return int(m.group(1))
-
-    return 0
-
-# This does not work for python3 as python3-virtualenv is depricated.
-# See https://docs.python.org/3/library/venv.html
-class PythonVenvCreator(object):
-    def __init__(self, user_env, venv_path, python_exec):
-        self.user_env = user_env
-        self.venv_path = venv_path
-        self.python_exec = python_exec
-        self.pip_exec = os.path.join(self.venv_path, 'bin', 'pip')
-        self.cmd_env = self.user_env.get_proxy_env()
-
-    def create(self):
-        created_file = os.path.join(self.venv_path, '.created')
-
-        if not os.path.exists(created_file):
-            print('Creating venv {} ...'.format(self.venv_path))
-            mkdirs_verbose(self.venv_path)
-            if get_python_version(self.python_exec) == 3:
-                create_venv_cmd = [ self.python_exec, '-m', 'venv',
-                                    self.venv_path ]
-            else:
-                create_venv_cmd = [ self.user_env.venv_exec,
-                                    self.venv_path,
-                                    '-p', self.python_exec ]
-
-            easy_exec.exec_command(create_venv_cmd)
-
-            touch(created_file)
-        else:
-            print('{} already exists'.format(self.venv_path))
-
-        # Upgrade pip
-        print('Upgrading pip ...')
-        upgrade_pip_cmd = [ self.pip_exec,
-                            'install', '--upgrade', 'pip' ]
-        if self.user_env.cert is not None:
-            upgrade_pip_cmd.extend(['--cert', self.user_env.cert])
-        easy_exec.exec_command(upgrade_pip_cmd, env=self.cmd_env)
-
-
-    def install_packages(self, packages):
-        die_if_not_preset(self.venv_path)
-
-        print('Installing {} ...'.format(' '.join(packages)))
-        install_cmd = [ self.pip_exec, 'install' ] + packages
-        if self.user_env.cert is not None:
-            install_cmd.extend(['--cert', self.user_env.cert])
-        easy_exec.exec_command(install_cmd, env=self.cmd_env)
 
 class NeovimEnv(object):
     def __init__(self, user_env):
@@ -194,9 +103,16 @@ class NeovimEnv(object):
 
     def _setup_venv(self, venv_path, python_exec):
         # Create venv
-        venv_creator = PythonVenvCreator(self.user_env, venv_path, python_exec)
-        venv_creator.create()
-        venv_creator.install_packages(['neovim', 'jedi'])
+
+        venv_manager = venv_manager.VenvManager(venv_path,
+                                                python_exec,
+                                                self.user_env.venv_exec,
+                                                self.user_env.http_proxy,
+                                                self.user_env.https_proxy,
+                                                self.uesr_env.cert)
+
+        venv_manager.create()
+        venv_manager.install_packages(['neovim', 'jedi'])
 
     def _setup_venvs(self):
         # Python2
@@ -206,13 +122,13 @@ class NeovimEnv(object):
         self._setup_venv(self.user_env.nvim_venv_python3, self.user_env.python3)
 
     def _setup_dirs(self):
-        link_verbose(self.nvim_dir, self.nvim_link)
+        setup_utils.link_verbose(self.nvim_dir, self.nvim_link)
 
-        mkdirs_verbose(self.share_dir)
+        setup_utils.mkdirs_verbose(self.share_dir)
 
-        link_verbose(self.nvim_dir, self.nvim_share_dir)
+        setup_utils.link_verbose(self.nvim_dir, self.nvim_share_dir)
 
-        mkdirs_verbose(self.nvim_config_dir)
+        setup_utils.mkdirs_verbose(self.nvim_config_dir)
 
     def _create_init_vim(self):
         init_vim_file = os.path.join(self.nvim_config_dir, 'init.vim')
@@ -258,7 +174,7 @@ class TmuxEnv(object):
 
     def setup(self):
         die_if_not_preset(self.tmux_conf)
-        link_verbose(self.tmux_conf, self.tmux_conf_link)
+        setup_utils.link_verbose(self.tmux_conf, self.tmux_conf_link)
 
 class ZshEnv(object):
     def __init__(self, user_env):
@@ -288,11 +204,14 @@ class PythonVenv(object):
     def setup(self):
         print('Setting up PythonVenv')
         print('---------------------')
-        venv_creator = PythonVenvCreator(self.user_env,
-                                         self.user_env.python3_venv,
-                                         self.user_env.python3)
-        venv_creator.create()
-        venv_creator.install_packages(['numpy', 'pandas', 'scipy',
+        venv_manager = venv_manager.VenvManager(self.user_env.python3_venv,
+                                                self.user_env.python3,
+                                                self.user_env.venv_exec,
+                                                self.user_env.http_proxy,
+                                                self.user_env.https_proxy,
+                                                self.uesr_env.cert)
+        venv_manager.create()
+        venv_manager.install_packages(['numpy', 'pandas', 'scipy',
                                        'scikit-learn', 'matplotlib',
                                        'pandas-datareader', 'beautifulsoup4',
                                        'lxml'

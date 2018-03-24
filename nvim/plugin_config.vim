@@ -26,22 +26,14 @@ nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
 nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 
-
 " Deoplete-jedi
-let g:deoplete#sources#jedi#python_path="/home/rsriniva/bign/venvs/nvim_python3_venv/bin/python"
+let g:deoplete#sources#jedi#python_path="/home/ram/bin/venvs/nvim_venv3/bin/python"
 let g:deoplete#sources#jedi#show_docstring = 1
+autocmd CompleteDone * silent! pclose!
+
 
 " Denite
 source ~/.nvim/denite_config.vim
-
-
-" Language Client
-let g:LanguageClient_serverCommands = {
-            \ 'cpp': ['/home/rsriniva/repos/cquery/build/release/bin/cquery', '--log-file=/tmp/cq.log']
-            \ }
-let g:LanguageClient_loadSettings = 1
-" Use an absolute configuration path if you want system-wide settings
-let g:LanguageClient_settingsPath = '/home/rsriniva/.config/nvim/settings.json'
 
 " Airline
 let g:airline_powerline_fonts=1
