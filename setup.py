@@ -6,11 +6,15 @@ import configparser
 import easy_exec
 import argparse
 import re
+import shutil
 
 def link_verbose(src, dest):
     if os.path.exists(dest) or os.path.islink(dest):
         print('Removing {}'.format(dest))
-        os.remove(dest)
+        if os.path.isfile(dest) or os.path.islink(dest):
+            os.remove(dest)
+        else:
+            shutil.rmtree(dest)
 
     print('Linking {} -> {}'.format(dest, src))
     os.symlink(src, dest)
@@ -216,7 +220,7 @@ class NeovimEnv(object):
             f.write('let g:python_host_prog="{}"\n'.format(
                         os.path.join(self.user_env.nvim_venv_python2, 'bin', 'python')))
             f.write('let g:python3_host_prog="{}"\n'.format(
-                        os.path.join(self.user_env.nvim_venv_python3, 'bin', 'python3')))
+                        os.path.join(self.user_env.nvim_venv_python3, 'bin', 'python')))
             f.write('source {}\n'.format(os.path.join(self.nvim_link, 'init.vim')))
 
     def _setup_vim_plugged(self):
@@ -225,7 +229,7 @@ class NeovimEnv(object):
                                      'site', 'autoload', 'plug.vim')
         cmd_env = self.user_env.get_proxy_env()
 
-        cmd = [ 'curl', '-fLo', vim_plug_file, '--create-dirs',
+        cmd = [ 'curl', '-k', '-fLo', vim_plug_file, '--create-dirs',
                 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim' ]
 
         if self.user_env.cert is not None:
@@ -313,13 +317,13 @@ def main():
 
     # return
 
-    if args.neovim:
-        nvim_env = NeovimEnv(user_env)
-        nvim_env.setup()
+    # if args.neovim:
+    #     nvim_env = NeovimEnv(user_env)
+    #     nvim_env.setup()
 
-    # if args.python_venv:
-    #     python_env = PythonVenv(user_env)
-    #     python_env.setup()
+    if args.python_venv:
+       python_env = PythonVenv(user_env)
+       python_env.setup()
 
 
 if __name__ == "__main__":

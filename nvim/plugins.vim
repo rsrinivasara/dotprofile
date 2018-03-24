@@ -16,6 +16,12 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
 Plug 'zchee/deoplete-jedi'
 
 Plug 'Shougo/denite.nvim'
@@ -25,5 +31,10 @@ Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdcommenter'
+
+Plug 'derekwyatt/vim-fswitch'
+Plug 'scrooloose/nerdcommenter'
+
+Plug 'Valloric/ListToggle'
 
 call plug#end()
