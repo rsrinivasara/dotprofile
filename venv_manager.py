@@ -11,7 +11,7 @@ import setup_utils
 # This does not work for python3 as python3-virtualenv is depricated.
 # See https://docs.python.org/3/library/venv.html
 class VenvManager(object):
-    def __init__(self, venv_path, python_exec = 'python',
+    def __init__(self, venv_path, python_exec = 'python3',
                  venv_exec = 'virtualenv', http_proxy = None,
                  https_proxy = None, cert = None):
         self.venv_path = venv_path

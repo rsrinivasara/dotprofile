@@ -27,7 +27,8 @@ nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 
 " Deoplete-jedi
-let g:deoplete#sources#jedi#python_path="/home/ram/bin/venvs/nvim_venv3/bin/python"
+" let g:deoplete#sources#jedi#python_path="/Users/rsrinivasara/tools/nvim_venv3/bin/python"
+let g:deoplete#sources#jedi#python_path="//Users/rsrinivasara/tools/edx_venv/bin/python3"
 let g:deoplete#sources#jedi#show_docstring = 1
 autocmd CompleteDone * silent! pclose!
 
