@@ -1,28 +1,28 @@
 # Cleanup
 rm ~/.zshrc
 rm ~/.tmux.conf
-rm ~/.vimrc
-rm ~/.vim
 rm -rf ~/.oh-my-zsh
-rm -rf ~/repos/tux4life
-rm -rf ~/repos/fonts
-rm -rf ~/repos/tux4life
 rm -rf ~/.tmux
+
+# Cleanup nvim config
+rm ~/.config/nvim
+rm -rf ~/.local/share/nvim
+rm -rf ~/.local/state/nvim
+rm -rf ~/.cache/nvim
+
+mkdir -p ~/.config
+mkdir -p ~/repos/tux4life
+
 # Clone required repos
-git clone git@github.com:tux4life/tmux-config.git       ~/repos/tux4life/tmux-config
-git clone git@github.com:tux4life/dotvim.git            ~/repos/tux4life/dotvim
-git clone git@github.com:tux4life/dotprofile.git        ~/repos/tux4life/dotprofile
-git clone https://github.com/powerline/fonts.git        ~/repos/fonts
-git clone git://github.com/robbyrussell/oh-my-zsh.git   ~/.oh-my-zsh
-git clone https://github.com/tmux-plugins/tpm            ~/.tmux/plugins/tpm
+git clone git@github.com:tux4life/dotprofile.git ~/repos/tux4life/dotprofile
+git clone git@github.com:rsrinivasara/nvim-config.git ~/repos/tux4life/nvim-config
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone git@github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+git clone https://github.com/romkatv/powerlevel10k.git /home/ram/.oh-my-zsh/custom/powerlevel10k
+git clone https://github.com/zsh-users/zsh-autosuggestions /home/ram/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /home/ram/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
 # Create required links
-ln -s ~/repos/tux4life/dotprofile/zshrc       ~/.zshrc
-ln -s ~/repos/tux4life/tmux-config/tmux.conf  ~/.tmux.conf
-ln -s ~/repos/tux4life/dotvim/                ~/.vim
-ln -s ~/repos/tux4life/dotvim/vimrc           ~/.vimrc
-# Install fonts
-~/repos/fonts/install.sh
-# Install Packages
-sudo apt-get install \
-    zsh tmux cmake vim fasd \
-    autojump python3.8-dev g++
+ln -s ~/repos/tux4life/dotprofile/zshrc ~/.zshrc
+ln -s ~/repos/tux4life/dotprofile/tmux.conf ~/.tmux.conf
+ln -s ~/repos/tux4life/nvim-config ~/.config/nvim
