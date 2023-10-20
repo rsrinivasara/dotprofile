@@ -113,10 +113,12 @@ fi
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias vi='vim'
-alias ls='exa --header --long --git'
-alias cat='bat'
-alias fd='cd $(find . -type d -print | fzf)'
+alias vi='nvim'
+if grep -q "Red Hat Enterprise Linux" /etc/os-release; then
+    alias ls='exa --header --long --git'
+    alias cat='bat'
+    alias fd='cd $(find . -type d -print | fzf)'
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
